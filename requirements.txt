@@ -1,2 +1,4 @@
-pyttsx3
-textblob
+flask>=2.0
+edge-tts
+transformers
+torch
