@@ -1,0 +1,5 @@
+__pycache__/
+*.pyc
+.env
+static/*.mp3
+file_list.txt
