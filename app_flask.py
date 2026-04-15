@@ -74,13 +74,13 @@ def detect_emotion(text):
 
 # Split text into segments
 def split_text_into_segments(text):
-    parts = re.split(r'([.!?])', text)
-    segments = []
+    # handle newlines + paragraphs
+    text = text.replace("\n", " ")
 
-    for i in range(0, len(parts)-1, 2):
-        segments.append(parts[i] + parts[i+1])
+    # split properly into sentences
+    sentences = re.split(r'(?<=[.!?]) +', text)
 
-    return segments
+    return [s.strip() for s in sentences if s.strip()]
 
 
 # Segment-level emotion detection
@@ -97,7 +97,7 @@ def detect_segment_emotion(segment):
 
 
 #  Generate audio for each segment
-async def generate_voice(text):
+async def generate_voice(text,voice_choice):
     segments = split_text_into_segments(text)
 
     # STEP 1: detect emotions
@@ -111,7 +111,7 @@ async def generate_voice(text):
         final_segments.append(segments[i])
         final_emotions.append(base_emotions[i])
 
-        # 🔥 check for big jump → insert transition
+        #  check for big jump → insert transition
         if i < len(base_emotions) - 1:
             prev = base_emotions[i]
             curr = base_emotions[i+1]
@@ -139,7 +139,10 @@ async def generate_voice(text):
         filename = f"static/part_{i}.mp3"
         filenames.append(filename)
 
-        voice = "en-US-AriaNeural"
+        if voice_choice == "male":
+            voice = "en-US-GuyNeural"
+        else:
+            voice = "en-US-AriaNeural"
 
         if emotion == "excited":
             rate, pitch = "+50%", "+30Hz"
@@ -182,7 +185,7 @@ import os
 
 def merge_audio(files):
 
-    # 🔥 ensure files exist
+    #  ensure files exist
     files = [os.path.abspath(f) for f in files if os.path.exists(f)]
 
     if not files:
@@ -197,7 +200,7 @@ def merge_audio(files):
     # run ffmpeg safely
     subprocess.run([
         "ffmpeg",
-        "-y",  # 🔥 auto overwrite (fix your prompt issue)
+        "-y",  #  auto overwrite (fix your prompt issue)
         "-f", "concat",
         "-safe", "0",
         "-i", "file_list.txt",
@@ -213,7 +216,7 @@ def smooth_emotions(emotions):
         prev = smoothed[-1]
         curr = emotions[i]
 
-        # 🔥 smart transitions
+        #  smart transitions
         if prev == "excited" and curr == "sad":
             smoothed.append("calm")
 
@@ -226,7 +229,7 @@ def smooth_emotions(emotions):
         elif prev == "calm" and curr == "angry":
             smoothed.append("neutral")
 
-        # 🔥 slight variation (important)
+        #  slight variation (important)
         elif prev != curr:
             smoothed.append("neutral")
 
@@ -239,8 +242,9 @@ def smooth_emotions(emotions):
 def index():
     if request.method == "POST":
         text = request.form["text"]
+        voice_choice = request.form["voice"]
 
-        filenames = asyncio.run(generate_voice(text))
+        filenames = asyncio.run(generate_voice(text,voice_choice))
         merge_audio(filenames)
 
         emotion = detect_emotion(text)

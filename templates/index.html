@@ -5,68 +5,79 @@
     <style>
         body {
             font-family: Arial;
-            background: #f4f6f8;
             text-align: center;
-            padding: 40px;
+            background: #f5f5f5;
         }
 
-        h1 {
-            color: #333;
+        .container {
+            margin-top: 60px;
         }
 
         textarea {
             width: 60%;
+            height: 120px;
             padding: 10px;
+            font-size: 16px;
             border-radius: 8px;
             border: 1px solid #ccc;
         }
 
-        button {
-            margin-top: 15px;
-            padding: 10px 20px;
-            border: none;
-            background: #007bff;
-            color: white;
+        select {
+            padding: 8px;
             border-radius: 6px;
+        }
+
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            border: none;
+            border-radius: 8px;
+            background-color: #007bff;
+            color: white;
             cursor: pointer;
         }
 
         button:hover {
-            background: #0056b3;
+            background-color: #0056b3;
         }
 
-        .card {
-            margin-top: 30px;
-            background: white;
-            padding: 20px;
-            border-radius: 10px;
-            display: inline-block;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        .controls {
+            margin-top: 15px;
         }
 
         audio {
-            margin-top: 15px;
+            margin-top: 20px;
         }
     </style>
 </head>
+
 <body>
 
+<div class="container">
     <h1>🎙️ Empathy Engine</h1>
     <p>Generate emotionally expressive speech from text</p>
 
     <form method="POST">
-        <textarea name="text" rows="4" placeholder="Enter your text..."></textarea><br>
-        <button type="submit">Generate Voice</button>
+        <textarea name="text" placeholder="Enter your text..." required></textarea>
+
+        <div class="controls">
+            <label>Select Voice:</label>
+            <select name="voice">
+                <option value="female">Female</option>
+                <option value="male">Male</option>
+            </select>
+
+            <button type="submit">Generate</button>
+        </div>
     </form>
 
     {% if text %}
-    <div class="card">
         <h3>Detected Emotion: {{ emotion }}</h3>
         <audio controls>
-            <source src="/static/output.mp3" type="audio/mpeg">
+            <source src="/static/output.mp3" type="audio/mp3">
         </audio>
-    </div>
     {% endif %}
+</div>
 
 </body>
 </html>
