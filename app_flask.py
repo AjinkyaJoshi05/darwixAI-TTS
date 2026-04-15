@@ -213,11 +213,21 @@ def smooth_emotions(emotions):
         prev = smoothed[-1]
         curr = emotions[i]
 
-        if (prev == "excited" and curr == "sad") or \
-           (prev == "sad" and curr == "excited") or \
-           (prev == "angry" and curr == "calm") or \
-           (prev == "calm" and curr == "angry"):
+        # 🔥 smart transitions
+        if prev == "excited" and curr == "sad":
+            smoothed.append("calm")
 
+        elif prev == "sad" and curr == "excited":
+            smoothed.append("calm")
+
+        elif prev == "angry" and curr == "calm":
+            smoothed.append("neutral")
+
+        elif prev == "calm" and curr == "angry":
+            smoothed.append("neutral")
+
+        # 🔥 slight variation (important)
+        elif prev != curr:
             smoothed.append("neutral")
 
         smoothed.append(curr)
