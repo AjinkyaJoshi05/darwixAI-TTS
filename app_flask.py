@@ -165,6 +165,17 @@ async def generate_voice(text,voice_choice):
         else:
             rate, pitch = "+0%", "+0Hz"
 
+        # ssml_text = f"""
+        # <speak version='1.0' xmlns='http://www.w3.org/2001/10/synthesis'>
+        #     <voice name="{voice}">
+        #         <prosody rate="{rate}" pitch="{pitch}">
+        #             {segment}
+        #         </prosody>
+        #         <break time="300ms"/>
+        #     </voice>
+        # </speak>
+        # """
+        text=segment
         communicate = edge_tts.Communicate(
             text=segment,
             voice=voice,
