@@ -1,6 +1,0 @@
-file 'D:\Courses\DarwixAI\static\part_0.mp3'
-file 'D:\Courses\DarwixAI\static\part_1.mp3'
-file 'D:\Courses\DarwixAI\static\part_2.mp3'
-file 'D:\Courses\DarwixAI\static\part_3.mp3'
-file 'D:\Courses\DarwixAI\static\part_4.mp3'
-file 'D:\Courses\DarwixAI\static\part_5.mp3'
